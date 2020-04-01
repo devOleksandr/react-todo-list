@@ -21,22 +21,32 @@ class TodoListItem extends React.Component{
     // }
 
     state = {
-      done: false
+      done: false,
+        important: false
     };
 
 
     //Використовуючи "Поля классов"
     onLabelClick = () =>{
-        this.setState({
-            done: true
-        });
+        this.setState((state) => {
+            return{
+                done: !state.done
+            }
+        })
+    };
+    onMarkImportant = () => {
+       this.setState( (state) =>{
+           return{
+               important: !state.important
+           }
+       });
     };
 
 
     render(){
 
-        const { label, important = false } = this.props;
-        const { done } = this.state;
+        const { label,onDeleted } = this.props;
+        const { done, important } = this.state;
 
         let classNames = 'todo-list-item';
 
@@ -44,26 +54,26 @@ class TodoListItem extends React.Component{
             classNames += ' done';
         }
 
-        const style = {
-            color: important ? 'steelblue' : 'black',
-            fontWeight: important ? 'bold' : 'normal'
-        };
+        if (important){
+            classNames += ' important';
+        }
 
         return (
             <span className={classNames}>
               <span
                   className="todo-list-item-label"
-                  style={style}
                     onClick={this.onLabelClick}>
                   {label}
               </span>
 
               <button type="button"
-                      className="btn btn-outline-success btn-sm float-right">
+                      className="btn btn-outline-success btn-sm float-right"
+                    onClick={this.onMarkImportant}>
                 <i className="fa fa-exclamation" />
               </button>
               <button type="button"
-                      className="btn btn-outline-danger btn-sm float-right">
+                      className="btn btn-outline-danger btn-sm float-right"
+                      onClick={ onDeleted }>
                 <i className="fa fa-trash-o" />
               </button>
             </span>
